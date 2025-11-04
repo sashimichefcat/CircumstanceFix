@@ -75,23 +75,30 @@ local function ensure_objectives_tab_titles(view)
 		return
 	end
 
-	
+	local has_dsmi = get_mod("DistinctSideMissionIcons")
+
 	for _, widget in ipairs(tabs) do
 		local style = widget.style and widget.style.objectives_panel_title
 		if style and not style._cf_fixed then
 			local title_text = widget.content and widget.content.objectives_panel_title or ""
 			if title_text and title_text:lower():find("recover") and title_text:lower():find("scripture") then
-				local shift = 15
+				local shift_title = 15 
+				local shift_icon = 15  
+
+				if has_dsmi then
+					shift_icon = 10 -- shift less when DSMI is present
+				end
+
 				-- objective title
-				style.offset[1] = (style.offset[1] or 0) - shift
+				style.offset[1] = (style.offset[1] or 0) - shift_title
 				local sub_style = widget.style and widget.style.objectives_panel_sub_title
 				if sub_style then
-					sub_style.offset[1] = (sub_style.offset[1] or 0) - shift
+					sub_style.offset[1] = (sub_style.offset[1] or 0) - shift_title
 				end
 				-- Move the icon as well
 				local icon_style = widget.style and widget.style.icon
 				if icon_style then
-					icon_style.offset[1] = (icon_style.offset[1] or 0) - shift
+					icon_style.offset[1] = (icon_style.offset[1] or 0) - shift_icon
 				end
 			end
 			style._cf_fixed = true -- don't redo
